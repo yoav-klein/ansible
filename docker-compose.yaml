@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  server1:
+    build: 
+      context: images/server
+    command: ["/sbin/sshd", "-D"]
+    container_name: server1
+  server2:
+    build:
+      context: images/server
+    command: ["/sbin/sshd", "-D"]
+    container_name: server2
+  ansible:
+    build:
+      context: images/ansible
+    command: ["cat"]
+    container_name: control-node
+    tty: true
+  net:
+    image: yoavklein3/net-tools:0.3
+    command: ["cat"]
+    tty: true
+networks:
+  default:
+    name: example.com
