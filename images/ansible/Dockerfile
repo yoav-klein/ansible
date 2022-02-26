@@ -1,5 +1,5 @@
 
-FROM ubuntu:20.04
+FROM ansible-base:1.0
 
 RUN apt-get update
 RUN apt-get install -y software-properties-common
