@@ -1,0 +1,15 @@
+---
+- name: install requirements
+  hosts: workers
+  become: true
+  tasks:
+      - name: Install base packages
+        ansible.builtin.apt:
+            pkg:
+                -  curl 
+                - apt-transport-https
+                - ca-certificates 
+                - gnupg 
+                - lsb-release
+            update_cache: yes
+            state: present
