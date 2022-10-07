@@ -3,13 +3,28 @@
   hosts: workers
   become: true
   tasks:
-      - name: Install base packages
-        ansible.builtin.apt:
-            pkg:
-                -  curl 
-                - apt-transport-https
-                - ca-certificates 
-                - gnupg 
-                - lsb-release
-            update_cache: yes
-            state: present
+  - name: Install base packages
+    ansible.builtin.apt:
+        pkg:
+            -  curl 
+            - apt-transport-https
+            - ca-certificates 
+            - gnupg 
+            - lsb-release
+        update_cache: yes
+        state: present
+  - name: load kernel modules
+    community.general.modprobe:
+        name: "{{ item }}"
+    loop:
+        - overlay
+        - br_netfilter
+  - name: sysctl configuration
+    ansible.posix.sysctl:
+        name: "{{ item }}"
+        value: 1
+    loop:
+        - net.bridge.bridge-nf-call-iptables
+        - net.bridge.bridge-nf-call-ip6tables
+        - net.ipv4.ip_forward
+
