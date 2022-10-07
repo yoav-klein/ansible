@@ -27,4 +27,15 @@
         - net.bridge.bridge-nf-call-iptables
         - net.bridge.bridge-nf-call-ip6tables
         - net.ipv4.ip_forward
+  - name: install containerd
+    ansible.builtin.apt:
+        name: containerd
+  - name: create containerd directory
+    ansible.builtin.file:
+        path: /etc/containerd
+        state: directory
+  - name: containerd configuration
+    ansible.builtin.shell: containerd config default > /etc/containerd/config.toml
+    args:
+        creates: /etc/containerd/config.toml
 
