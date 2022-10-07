@@ -1,6 +1,8 @@
 ---
 - name: install requirements
-  hosts: workers
+  hosts: 
+  - workers
+  - controller
   become: true
   tasks:
   - name: Install base packages
@@ -42,3 +44,13 @@
     ansible.builtin.systemd:
         name: containerd
         state: restarted
+- name: Install Kubernetes
+  hosts:
+      - controller
+      - workers
+  become: true
+  tasks:
+  - name: Add an Apt signing key
+    ansible.builtin.apt_key:
+     url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+     state: present
