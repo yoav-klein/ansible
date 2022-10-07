@@ -38,4 +38,7 @@
     ansible.builtin.shell: containerd config default > /etc/containerd/config.toml
     args:
         creates: /etc/containerd/config.toml
-
+  - name: restart containerd service
+    ansible.builtin.systemd:
+        name: containerd
+        state: restarted
