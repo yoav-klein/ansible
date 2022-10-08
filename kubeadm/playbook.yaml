@@ -49,6 +49,8 @@
       - controller
       - workers
   become: true
+  vars:
+      kubernetes_version: 1.24.0-00
   tasks:
   - name: Add an Apt signing key
     ansible.builtin.apt_key:
@@ -64,8 +66,8 @@
         update_cache: yes
         state: present
         pkg: 
-            - kubelet=1.24.0-00
-            - kubeadm=1.24.0-00
-            - kubectl=1.24.0-00
+            - kubelet={{ kubernetes_version }}
+            - kubeadm={{ kubernetes_version }}
+            - kubectl={{ kubernetes_version }}
 
- 
+  - name:
