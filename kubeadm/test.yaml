@@ -1,0 +1,16 @@
+- hosts: controller
+  tasks:
+          - name: produce
+            ansible.builtin.shell: echo "kuku"
+            register: res
+          - name: consume
+            ansible.builtin.debug: 
+             msg: "{{ res }}"
+- hosts: workers
+  tasks:
+          - name: consume
+            ansible.builtin.debug:
+                    #                    msg: "{{ hostvars['controller']['res'] }}"
+                   msg: "{{ hostvars['controller']['res'] }}"
+
+

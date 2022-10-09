@@ -70,4 +70,8 @@
             - kubeadm={{ kubernetes_version }}
             - kubectl={{ kubernetes_version }}
 
-  - name:
+- name: Initialize cluster
+  hosts: controller
+  become: true
+  tasks:
+          - 
