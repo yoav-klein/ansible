@@ -104,6 +104,18 @@
     become: yes
     become_user: yoav
     ansible.builtin.shell: kubeadm token create  --print-join-command
-    register: kubernetes_join_command
+    register: join_command
 
-  - name: 
+- name: Join worker nodes
+  hosts: workers
+  become: true
+  tasks:
+
+  - name: print_cmd
+    ansible.builtin.debug: 
+      msg: "{{ hostvars['controller']['join_command'] }}"
+  - name: Join nodes
+    ansible.builtin.shell: 
+    args:
+        cmd: "{{ hostvars['controller']['join_command'].stdout_lines[0] }}" 
+        creates: /etc/kubernetes/kubelet.conf
