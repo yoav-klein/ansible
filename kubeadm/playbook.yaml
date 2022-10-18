@@ -74,4 +74,36 @@
   hosts: controller
   become: true
   tasks:
-          - 
+  - name: Init cluster
+    ansible.builtin.shell: 
+    args:
+       cmd: kubeadm init --pod-network-cidr=192.168.0.0/16 --kubernetes-version=1.24.0
+       creates: /etc/kubernetes/manifests/kube-apiserver.yaml
+
+  - name: Create .kube directory
+    become: true
+    become_user: yoav
+    ansible.builtin.file:
+        path: $HOME/.kube
+        state: directory
+        mode: 0755
+
+  - name: Copy kubeconfig
+    ansible.builtin.copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/yoav/.kube/config
+        remote_src: true
+        owner: yoav
+
+  - name: Install pod network
+    become: true
+    become_user: yoav
+    ansible.builtin.shell: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+
+  - name: Get the token for joining the worker nodes
+    become: yes
+    become_user: yoav
+    ansible.builtin.shell: kubeadm token create  --print-join-command
+    register: kubernetes_join_command
+
+  - name: 
