@@ -98,7 +98,7 @@
   - name: Install pod network
     become: true
     become_user: yoav
-    ansible.builtin.shell: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+    ansible.builtin.shell: kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
 
   - name: Get the token for joining the worker nodes
     become: yes
