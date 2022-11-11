@@ -83,7 +83,7 @@
 
   - name: Create .kube directory
     become: true
-    become_user: cloud_user
+    become_user: "{{ ansible_user }}"
     ansible.builtin.file:
         path: $HOME/.kube
         state: directory
@@ -99,7 +99,7 @@
   - name: Install pod network
     become: true
     become_user: '{{ ansible_user }}'
-    ansible.builtin.shell: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+    ansible.builtin.shell: kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
 
   - name: Get the token for joining the worker nodes
     become: true
@@ -117,5 +117,5 @@
   - name: Join nodes
     ansible.builtin.shell: 
     args:
-        cmd: "{{ hostvars['172.31.119.118']['join_command'].stdout_lines[0] }}" 
+        cmd: "{{ hostvars['my_controller']['join_command'].stdout_lines[0] }}" 
         creates: /etc/kubernetes/kubelet.conf
