@@ -1,6 +1,10 @@
 [controller]
-controller
+my_controller ansible_host=controller
 
 [workers]
 worker1
 worker2
+
+[all:vars]
+ansible_user=yoav
+
