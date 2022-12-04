@@ -74,6 +74,8 @@
 - name: Initialize cluster
   hosts: controller
   become: true
+  vars:
+    pod_cidr: "192.168.0.0/16"
   tasks:
   - name: Init cluster
     ansible.builtin.shell: 
@@ -95,11 +97,15 @@
         dest: "/home/{{ ansible_user }}/.kube/config"
         remote_src: true
         owner: "{{ ansible_user  }}"
+  - name: Render weavenet YAML
+    ansible.builtin.template:
+        src: weavenet.yaml
+        dest: /tmp/weavenet.yaml
 
   - name: Install pod network
     become: true
     become_user: '{{ ansible_user }}'
-    ansible.builtin.shell: kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+    ansible.builtin.shell: kubectl apply -f /tmp/weavenet.yaml
 
   - name: Get the token for joining the worker nodes
     become: true
