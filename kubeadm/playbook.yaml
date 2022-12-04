@@ -80,7 +80,7 @@
   - name: Init cluster
     ansible.builtin.shell: 
     args:
-       cmd: kubeadm init --pod-network-cidr=192.168.0.0/16 --kubernetes-version=1.24.0
+       cmd: kubeadm init --pod-network-cidr={{ pod_cidr }} --kubernetes-version=1.24.0
        creates: /etc/kubernetes/manifests/kube-apiserver.yaml
 
   - name: Create .kube directory
