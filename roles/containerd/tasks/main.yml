@@ -4,8 +4,24 @@
 # Download and Install runc
 # Downlaod and install cni plugins
 
-- name: Download continerd
+- name: Download containerd
   ansible.builtin.get_url:
-      url: https://github.com/containerd/container/releases/download/containerd-{{ version }}-linux-amd64.tar.gz
+      url: https://github.com/containerd/containerd/releases/download/v{{ version }}/containerd-{{ version }}-linux-amd64.tar.gz
       dest: /tmp/containerd.tar.gz
 
+- name: Install containerd
+  become: true
+  ansible.builtin.unarchive:
+      src: /tmp/containerd.tar.gz
+      dest: /usr/local
+
+- name: Download unit file for containerd
+  become: true
+  ansible.builtin.get_url:
+      url: https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
+      dest: /etc/systemd/system/containerd.service
+
+- name: Enable containerd service
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    
