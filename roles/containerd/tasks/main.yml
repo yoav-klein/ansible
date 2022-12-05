@@ -1,0 +1,11 @@
+---
+# Download containerd
+# Install as systemd service
+# Download and Install runc
+# Downlaod and install cni plugins
+
+- name: Download continerd
+  ansible.builtin.get_url:
+      url: https://github.com/containerd/container/releases/download/containerd-{{ version }}-linux-amd64.tar.gz
+      dest: /tmp/containerd.tar.gz
+
