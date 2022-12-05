@@ -1,0 +1,40 @@
+- hosts: all
+  name: Using roles keyword
+  roles:
+      - sayhi
+  tasks:
+  - name: First task
+    ansible.builtin.debug:
+        msg: "First task in play"
+  - name: Last task
+    ansible.builtin.debug:
+        msg: "Last task in play"
+
+- hosts: all
+  name: Using include_roles
+  tasks:
+  - name: First task      
+    ansible.builtin.debug:
+        msg: "First task in play"
+
+  - name: Include role
+    include_role:
+        name: sayhi
+
+  - name: Last task
+    ansible.builtin.debug:
+        msg: "Last task in play"
+
+- hosts: all
+  name: Using import_roles
+  tasks:
+  - name: First task      
+    ansible.builtin.debug:
+        msg: "First task in play"
+
+  - name: Import role
+    import_role:
+        name: sayhi
+
+  - name: Last task
+    ansible.builtin.debug:
