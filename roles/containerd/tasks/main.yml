@@ -7,7 +7,7 @@
 - name: Install containerd
   become: true
   ansible.builtin.unarchive:
-      src: https://github.com/containernetworking/plugins/releases/download/v${cniplugins_version}/cni-plugins-linux-amd64-v${cniplugins_version}.tgz
+      src: https://github.com/containerd/containerd/releases/download/v{{ nerd_version }}/containerd-{{ nerd_version }}-linux-amd64.tar.gz
       remote_src: true
       dest: /usr/local
 
