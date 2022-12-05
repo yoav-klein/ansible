@@ -1,3 +1,5 @@
 ---
 # vars file for containerd
-version: 1.6.10
+nerd_version: 1.6.10
+cni_version: 1.1.1
+runc_version: 1.1.3

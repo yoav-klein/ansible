@@ -4,15 +4,11 @@
 # Download and Install runc
 # Downlaod and install cni plugins
 
-- name: Download containerd
-  ansible.builtin.get_url:
-      url: https://github.com/containerd/containerd/releases/download/v{{ version }}/containerd-{{ version }}-linux-amd64.tar.gz
-      dest: /tmp/containerd.tar.gz
-
 - name: Install containerd
   become: true
   ansible.builtin.unarchive:
-      src: /tmp/containerd.tar.gz
+      src: https://github.com/containernetworking/plugins/releases/download/v${cniplugins_version}/cni-plugins-linux-amd64-v${cniplugins_version}.tgz
+      remote_src: true
       dest: /usr/local
 
 - name: Download unit file for containerd
@@ -22,6 +18,29 @@
       dest: /etc/systemd/system/containerd.service
 
 - name: Enable containerd service
+  become: true
   ansible.builtin.systemd:
     daemon_reload: yes
-    
+    name: containerd
+    enabled: true
+
+- name: Install runc
+  become: true
+  ansible.builtin.get_url:
+      url: https://github.com/opencontainers/runc/releases/download/v{{ runc_version }}/runc.amd64  
+      mode: '+x'
+      dest: /usr/local/sbin/runc
+
+- name: Create CNI directory
+  become: true
+  ansible.builtin.file:
+      state: directory
+      path: /opt/cni/bin
+
+- name: Install CNI plugins
+  become: true
+  ansible.builtin.unarchive:
+      src: https://github.com/containernetworking/plugins/releases/download/v{{ cni_version }}/cni-plugins-linux-amd64-v{{ cni_version }}.tgz
+      remote_src: true
+      dest: /opt/cni/bin
+
