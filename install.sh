@@ -13,6 +13,7 @@ cd Python-3.9.14
 ./configure
 make -j8
 sudo make install
+cd ..
 
 # insatll ansible
 python3 -m pip install ansible --user
