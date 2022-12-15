@@ -1,0 +1,16 @@
+- name: get cni-plugin repository
+  ansible.builtin.git:
+    repo: 'https://github.com/yoav-klein/cni-plugin'
+    dest: /tmp/cni-plugin
+- name: render template
+  become: true
+  ansible.builtin.template:
+    src: /tmp/cni-plugin/10-cni-config.conflist.j2
+    dest: /etc/cni/net.d/10-cni-config.conflist
+- name: copy CNI plugin binary
+  become: true
+  ansible.builtin.copy:
+    src: /tmp/cni-plugin/my-cni-plugin
+    dest: /opt/cni/bin/
+    mode: +x
+

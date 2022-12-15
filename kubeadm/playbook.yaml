@@ -76,6 +76,8 @@
   become: true
   vars:
     pod_cidr: "192.168.0.0/16"
+    cni_plugin: "weave" # "my"  or "weave"
+
   tasks:
   - name: Init cluster
     ansible.builtin.shell: 
@@ -97,15 +99,22 @@
         dest: "/home/{{ ansible_user }}/.kube/config"
         remote_src: true
         owner: "{{ ansible_user  }}"
+
   - name: Render weavenet YAML
     ansible.builtin.template:
         src: weavenet.yaml
         dest: /tmp/weavenet.yaml
 
+  - name: CNI plugin
+    ansible.builtin.include_tasks:
+        file: my-cni-tasks.yaml
+    when: cni_plugin == "my"
+
   - name: Install pod network
     become: true
     become_user: '{{ ansible_user }}'
     ansible.builtin.shell: kubectl apply -f /tmp/weavenet.yaml
+    when: cni_plugin == "weave"
 
   - name: Get the token for joining the worker nodes
     become: true
