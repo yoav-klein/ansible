@@ -13,6 +13,8 @@ $ cd images/base
 $ docker build -t ansible-base:1.0 .
 ```
 
+Then, Put your Ansible code you want to run in the `ansible-code` directory.
+
 Then, run the Docker compose:
 ```
 $ docker compose up -d
