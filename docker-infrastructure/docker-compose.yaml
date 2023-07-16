@@ -16,6 +16,8 @@ services:
     command: ["cat"]
     container_name: control-node
     tty: true
+    volumes:
+      - ./ansible-code:/ansible-code
   net:
     image: yoavklein3/net-tools:0.3
     command: ["cat"]

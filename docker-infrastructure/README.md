@@ -21,3 +21,13 @@ $ docker compose up -d
 ```
 
 Then, run the `copy-ssh.sh` script.
+
+## Running Ansible
+---
+
+In order to run ansible, exec into the container:
+```
+$ docker exec -it control-node bash
+$ ansible-playbook -u yoav /ansible-code/my-playbook.yaml 
+# assuming there's a playbook named my-playbook.yaml
+```
