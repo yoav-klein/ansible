@@ -1,0 +1,29 @@
+---
+- name: ps1
+  hosts: all
+  become: true
+  vars_files:
+          - vars/vars.yaml
+  tasks:
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: /opt/kube-ps1
+        state: directory
+        mode: '0755'
+    - name: Copy kube-ps1.sh
+      ansible.builtin.copy:
+        src: files/kube-ps1.sh
+        dest: /opt/kube-ps1/kube-ps1.sh
+        mode: '0755'
+    - name: Copy format_context.sh
+      ansible.builtin.template:
+        src: templates/format_context.sh
+        dest: /opt/kube-ps1/format_context.sh
+        mode: '0755'
+    - name: Update bashrc
+      ansible.builtin.blockinfile:
+        path: /home/{{ansible_user}}/.bashrc
+        block: |
+          source /opt/kube-ps1/format_context.sh
+          source /opt/kube-ps1/kube-ps1.sh
+          PS1="[\u@\h \W \$(kube_ps1)]\$ "
